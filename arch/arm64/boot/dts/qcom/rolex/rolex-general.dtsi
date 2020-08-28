@@ -239,3 +239,8 @@
 &sdhc_1 {
     qcom,vdd-always-on;
 };
+
+/* Fix iommu */
+&apps_iommu {
+	qcom,no-aarch64;
+};
