@@ -82,8 +82,8 @@
 		qcom,float-voltage-mv = <4400>;
 		qcom,recharge-mv = <50>;
 		regulator-name = "smb358_otg_vreg";
-		qcom,fastchg-current-max-ma = <1500>;
 		qcom,bms-psy-name = "bms";
+		qcom,chg-inhibit-disabled;	
 		qcom,chg-vadc = <&pm8937_vadc>;
 		qcom,iterm-ma = <150>;
 		status = "ok";
@@ -105,20 +105,15 @@
 	interrupt-names = "core_irq", "async_irq", "phy_irq";
 	vbus_otg-supply = <&smb358_otg_vreg>;
 	extcon = <&smb358_otg_vreg>;
-	qcom,hsusb-otg-phy-init-seq =
-		<0x39 0x81 0x37 0x82 0xffffffff>;
+	qcom,hsusb-otg-phy-init-seq = <0x39 0x81 0x37 0x82 0xffffffff>;
 };
 
 &pm8937_vadc{
 	chan@13 {
 		label = "mpp4";
 		reg = <0x13>;
-		qcom,decimation = <0>;
-		qcom,pre-div-channel-scaling = <0>;
 		qcom,calibration-type = "absolute";
 		qcom,scale-function = <0>;
-		qcom,hw-settle-time = <2>;
-		qcom,fast-avg-setup = <0>;
 	};
 };
 
@@ -225,9 +220,7 @@
 			max_timeout = <50000>;
 		};
 	};
-};
 
-&soc {
 	led_flash0: qcom,camera-flash {
 		cell-index = <0>;
 		compatible = "qcom,camera-flash";
