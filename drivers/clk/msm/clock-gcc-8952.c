@@ -851,28 +851,6 @@ static struct clk_freq_tbl ftbl_gcc_oxili_gfx3d_clk_8917[] = {
 	F_SLEW( 523200000, 1046400000,	  gpll3,	1,	0,	0),
 	F_SLEW( 550000000, 1100000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 598000000, 1196000000,	  gpll3,	1,	0,	0),
-	F_END
-};
-
-static struct clk_freq_tbl ftbl_gcc_oxili_gfx3d_clk_8917_650MHz[] = {
-	F_SLEW( 19200000,  FIXED_CLK_SRC, xo,		1,	0,	0),
-	F_SLEW( 50000000,  FIXED_CLK_SRC, gpll0,	16,	0,	0),
-	F_SLEW( 80000000,  FIXED_CLK_SRC, gpll0,	10,	0,	0),
-	F_SLEW( 100000000, FIXED_CLK_SRC, gpll0,	8,	0,	0),
-	F_SLEW( 160000000, FIXED_CLK_SRC, gpll0,	5,	0,	0),
-	F_SLEW( 200000000, FIXED_CLK_SRC, gpll0,	4,	0,	0),
-	F_SLEW( 228570000, FIXED_CLK_SRC, gpll0,	3.5,	0,	0),
-	F_SLEW( 240000000, FIXED_CLK_SRC, gpll6_aux,	4.5,	0,	0),
-	F_SLEW( 266670000, FIXED_CLK_SRC, gpll0,	3,	0,	0),
-	F_SLEW( 270000000, FIXED_CLK_SRC, gpll6_aux,	4,	0,	0),
-	F_SLEW( 320000000, FIXED_CLK_SRC, gpll0,	2.5,	0,	0),
-	F_SLEW( 400000000, FIXED_CLK_SRC, gpll0,	2,	0,	0),
-	F_SLEW( 465000000, 930000000,	  gpll3,	1,	0,	0),
-	F_SLEW( 484800000, 969600000,	  gpll3,	1,	0,	0),
-	F_SLEW( 500000000, 1000000000,	  gpll3,	1,	0,	0),
-	F_SLEW( 523200000, 1046400000,	  gpll3,	1,	0,	0),
-	F_SLEW( 550000000, 1100000000,	  gpll3,	1,	0,	0),
-	F_SLEW( 598000000, 1196000000,	  gpll3,	1,	0,	0),
 	F_SLEW( 650000000, 1300000000,	  gpll3,	1,	0,	0),
 	F_END
 };
@@ -4266,17 +4244,10 @@ static void override_for_8917(int speed_bin)
 	/* Frequency Table same as 8937 */
 	OVERRIDE_FTABLE(jpeg0, ftbl_gcc_camss_jpeg0_clk, 8937);
 
-	if (speed_bin) {
-		OVERRIDE_FMAX5(gfx3d,
-			LOWER, 270000000, LOW, 400000000, NOMINAL, 484800000,
-			NOM_PLUS, 523200000, HIGH, 650000000);
-		OVERRIDE_FTABLE(gfx3d, ftbl_gcc_oxili_gfx3d_clk, 8917_650MHz);
-	} else {
-		OVERRIDE_FMAX5(gfx3d,
-			LOWER, 270000000, LOW, 400000000, NOMINAL, 484800000,
-			NOM_PLUS, 523200000, HIGH, 598000000);
-		OVERRIDE_FTABLE(gfx3d, ftbl_gcc_oxili_gfx3d_clk, 8917);
-	}
+	OVERRIDE_FMAX5(gfx3d,
+		LOWER, 270000000, LOW, 400000000, NOMINAL, 484800000,
+		NOM_PLUS, 523200000, HIGH, 650000000);
+	OVERRIDE_FTABLE(gfx3d, ftbl_gcc_oxili_gfx3d_clk, 8917);
 
 	OVERRIDE_FMAX1(cci, LOWER, 37500000);
 
