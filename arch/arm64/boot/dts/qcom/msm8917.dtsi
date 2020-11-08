@@ -368,7 +368,7 @@
 	};
 
 	cpu-pmu {
-		compatible = "arm,armv8-pmuv3";
+		compatible = "arm,cortex-a53-pmu";
 		interrupts = <1 7 0xff00>;
 	};
 
