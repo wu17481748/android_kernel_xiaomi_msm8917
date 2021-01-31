@@ -31,6 +31,7 @@
 
 	qcom,lpm-levels {
 		compatible = "qcom,lpm-levels";
+		qcom,use-psci;
 		#address-cells = <1>;
 		#size-cells = <0>;
 
@@ -96,7 +97,7 @@
 				qcom,pm-cpu-level@0 {
 					reg = <0>;
 					label = "wfi";
-					qcom,psci-cpu-mode = <1>;
+					qcom,psci-cpu-mode = <0>;
 					qcom,entry-latency-us = <13>;
 					qcom,exit-latency-us = <12>;
 					qcom,min-residency-us = <25>;
