@@ -213,13 +213,9 @@
 		};
 	};
 
-	gpio-vib {
-		compatible = "gpio-vibrator";
-		vibrator {
-			gpios = <&tlmm 97 0>;
-			label = "vibrator";
-			max_timeout = <50000>;
-		};
+	ldo_vibrator {
+		compatible = "ldo-vibrator";
+		gpios = <&tlmm 97 0>;
 	};
 
 	led_flash0: qcom,camera-flash {
