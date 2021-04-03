@@ -1452,10 +1452,4 @@ config TOUCHSCREEN_RAYDIUM_CHIPSET
 
 	  If unsure, say N.
 
-config TOUCHSCREEN_FT5346
-	bool "FOCALTECH touchpanel FT5346 series"
-	depends on I2C
-
-source "drivers/input/touchscreen/FT5346/Kconfig"
-
 endif
