@@ -383,6 +383,9 @@
 		reg-names = "mdp_phys",
 			"rot_vbif_phys";
 			
+		qcom,mdss-wb-count = <1>;
+		qcom,mdss-wb-id = <0>;
+		qcom,mdss-ctl-id = <3>;
 		qcom,mdss-highest-bank-bit = <0x1>;
 
 		/* Bus Scale Settings */
@@ -400,7 +403,7 @@
 		clocks = <&clock_gcc clk_gcc_mdss_ahb_clk>,
 			<&clock_gcc_mdss clk_mdss_rotator_vote_clk>,
 			<&clock_gcc clk_gcc_mdss_axi_clk>;
-		clock-names = "iface_clk", "rot_core_clk",
+		clock-names = "iface_clk", "rot_clk",
 			"axi_clk";
 
 		interrupt-parent = <&mdss_mdp>;
@@ -408,7 +411,6 @@
 
 		/* VBIF QoS remapper settings*/
 		qcom,mdss-rot-vbif-qos-setting = <1 1 1 1>;
-		qcom,mdss-rot-xin-id = <14 15>;
 
 		qcom,mdss-default-ot-rd-limit = <32>;
 		qcom,mdss-default-ot-wr-limit = <32>;
