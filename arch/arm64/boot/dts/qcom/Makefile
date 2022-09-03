@@ -673,6 +673,8 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 	sdm429-spyro-wdp.dtb \
 	sda429-spyro-dvt.dtb \
 	sdm429-bg-iot-wtp.dtb
+	
+dtb-$(CONFIG_ARCH_MSM8917) += msm8917-pmi8937-qrd-rolex.dtb
 
 endif
 

@@ -1,0 +1,108 @@
+&soc {
+	/delete-node/ qseecom@85b00000;
+	qcom_seecom: qseecom@84A00000 {
+		compatible = "qcom,qseecom";
+		reg = <0x84A00000 0x1900000>;
+		reg-names = "secapp-region";
+		qcom,hlos-num-ce-hw-instances = <1>;
+		qcom,hlos-ce-hw-instance = <0>;
+		qcom,qsee-ce-hw-instance = <0>;
+		qcom,disk-encrypt-pipe-pair = <2>;
+		qcom,support-fde;
+		qcom,msm-bus,name = "qseecom-noc";
+		qcom,msm-bus,num-cases = <4>;
+		qcom,msm-bus,num-paths = <1>;
+		qcom,support-bus-scaling;
+		qcom,msm-bus,vectors-KBps =
+			<55 512 0 0>,
+			<55 512 0 0>,
+			<55 512 120000 1200000>,
+			<55 512 393600 3936000>;
+		clocks = <&clock_gcc clk_crypto_clk_src>,
+			 <&clock_gcc clk_gcc_crypto_clk>,
+			 <&clock_gcc clk_gcc_crypto_ahb_clk>,
+			 <&clock_gcc clk_gcc_crypto_axi_clk>;
+		clock-names = "core_clk_src", "core_clk",
+				"iface_clk", "bus_clk";
+		qcom,ce-opp-freq = <100000000>;
+	};
+	
+	gpio-leds {
+		compatible = "gpio-leds";
+		status = "okay";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_led_off>;
+		infred {
+			gpios = <&tlmm 45 0>;
+			label = "infrared";
+			linux,default-trigger = "infra-red";
+			default-state = "off";
+			retain-state-suspended;
+		};
+	};
+
+	ldo_vibrator {
+		compatible = "ldo-vibrator";
+		gpios = <&tlmm 97 0>;
+	};
+
+	led_flash0: qcom,camera-flash {
+		cell-index = <0>;
+		compatible = "qcom,camera-flash";
+		qcom,flash-type = <1>;
+	};
+	
+	gen-vkeys {
+		compatible = "qcom,gen-vkeys";
+		label = "ft5346";
+		qcom,disp-maxx = <720>;
+		qcom,disp-maxy = <1280>;
+		qcom,panel-maxx = <720>;
+		qcom,panel-maxy = <2080>;
+		qcom,key-codes = <139 172 158>;
+		qcom,y-offset = <0>;
+	};
+};
+
+&i2c_2 {
+	status = "ok";
+	/* aw2013 */
+};
+
+&i2c_3 {
+	status = "ok";
+	touchscreen@38 {
+		compatible = "edt,edt-ft5306", "edt,edt-ft5x06";
+		reg = <0x38>;
+		vcc-supply = <&pm8937_l10>;
+		iovcc-supply = <&pm8937_l5>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&ts_int_active &ts_reset_active>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <65 0x2008>;
+		reset-gpios = <&tlmm 64 0x00>;
+		touchscreen-size-x = <720>;
+		touchscreen-size-y = <1280>;
+	};
+	
+	/* goodix_ts */
+};
+
+&i2c_5 {
+	status = "ok";
+	/* smb358_otg_vreg */
+	/* cw2015 */
+};
+
+&usb_otg {
+	qcom,hsusb-otg-mode = <3>;
+	interrupts = <0 134 0>,<0 140 0>,<0 136 0>;
+	interrupt-names = "core_irq", "async_irq", "phy_irq";
+	// vbus_otg-supply = <&smb358_otg_vreg>;
+	// extcon = <&smb358_otg_vreg>;
+	qcom,hsusb-otg-phy-init-seq = <0x39 0x81 0x37 0x82 0xffffffff>;
+};
+ 
+&sdhc_1 {
+	qcom,vdd-always-on;
+};

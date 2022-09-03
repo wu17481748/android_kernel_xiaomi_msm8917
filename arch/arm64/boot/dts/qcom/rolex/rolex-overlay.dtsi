@@ -1,0 +1,8 @@
+#include "rolex-general.dtsi"
+#include "rolex-pinctrl.dtsi"
+#include "rolex-memory.dtsi"
+#include "rolex-camera.dtsi"
+#include "rolex-fstab.dtsi"
+#include "rolex-audio.dtsi"
+#include "rolex-mdss.dtsi" 
+#include "rolex-pm.dtsi" 

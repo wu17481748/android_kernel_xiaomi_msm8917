@@ -1,0 +1,24 @@
+/dts-v1/;
+
+#include "msm8917.dtsi"
+#include "pmi8937.dtsi"
+#include "msm8917-qrd.dtsi"
+#include "msm8917-audio.dtsi"
+#include "msm8937-mdss-panels.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. MSM8917-PMI8937 QRD SKU5";
+	compatible = "qcom,msm8917-qrd-sku5", "qcom,msm8917-qrd",
+		   "qcom,msm8917", "qcom,qrd";
+	qcom,board-id= <0x1000b 1>, <0x2000b 1>;
+	
+	qrd_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <15>;
+		qcom,rpull-up-kohm = <68>;
+		qcom,vref-batt-therm = <1800000>;
+		#include "rolex/battery/batterydata-wingtech-feimaotui_SONY-4v4-3030mah.dtsi"
+		#include "rolex/battery/batterydata-wingtech-xingwangda_ATL-4v4-3030mah.dtsi"
+	};
+};
+
+#include "rolex/rolex-overlay.dtsi"
