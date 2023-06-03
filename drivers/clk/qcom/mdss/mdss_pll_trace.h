@@ -1,14 +1,5 @@
-/* Copyright (c) 2018, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Copyright (c) 2019, 2020, The Linux Foundation. All rights reserved. */
 
 #if !defined(_MDSS_PLL_TRACE_H_) || defined(TRACE_HEADER_MULTI_READ)
 #define _MDSS_PLL_TRACE_H_
@@ -112,5 +103,5 @@ TRACE_EVENT(mdss_pll_trace_counter,
 
 /* This part must be outside protection */
 #undef TRACE_INCLUDE_PATH
-#define TRACE_INCLUDE_PATH .
+#define TRACE_INCLUDE_PATH ../../drivers/clk/qcom/mdss/
 #include <trace/define_trace.h>

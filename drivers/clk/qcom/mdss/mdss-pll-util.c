@@ -1,15 +1,5 @@
-/* Copyright (c) 2013-2017, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- */
+// SPDX-License-Identifier: GPL-2.0-only
+/* Copyright (c) 2013-2020, The Linux Foundation. All rights reserved. */
 
 #define pr_fmt(fmt)	"%s: " fmt, __func__
 
@@ -99,8 +89,6 @@ void mdss_pll_util_resource_release(struct platform_device *pdev,
 {
 	struct dss_module_power *mp = &pll_res->mp;
 
-	devm_kfree(&pdev->dev, mp->clk_config);
-	devm_kfree(&pdev->dev, mp->vreg_config);
 	mp->num_vreg = 0;
 	mp->num_clk = 0;
 }
@@ -275,11 +263,8 @@ static int mdss_pll_util_parse_dt_supply(struct platform_device *pdev,
 	return rc;
 
 error:
-	if (mp->vreg_config) {
-		devm_kfree(&pdev->dev, mp->vreg_config);
-		mp->vreg_config = NULL;
+	if (mp->vreg_config)
 		mp->num_vreg = 0;
-	}
 
 	return rc;
 }
@@ -337,7 +322,7 @@ static void mdss_pll_free_bootmem(u32 mem_addr, u32 size)
 		free_reserved_page(pfn_to_page(pfn_idx));
 }
 
-static int mdss_pll_util_parse_dt_dfps(struct platform_device *pdev,
+static int mdss_pll_util_parse_dt_dfps_sub(struct platform_device *pdev,
 					struct mdss_pll_resources *pll_res)
 {
 	int rc = 0;
@@ -420,18 +405,24 @@ int mdss_pll_util_resource_parse(struct platform_device *pdev,
 
 	rc = mdss_pll_util_parse_dt_clock(pdev, pll_res);
 	if (rc) {
-		pr_err("clock name parsing failed rc=%d", rc);
+		pr_err("clock name parsing failed rc=%d\n", rc);
 		goto clk_err;
 	}
-
-	if (mdss_pll_util_parse_dt_dfps(pdev, pll_res))
-		pr_err("dfps not enabled!\n");
 
 	return rc;
 
 clk_err:
-	devm_kfree(&pdev->dev, mp->vreg_config);
 	mp->num_vreg = 0;
 end:
 	return rc;
+}
+
+void mdss_pll_util_parse_dt_dfps(struct platform_device *pdev,
+				struct mdss_pll_resources *pll_res)
+{
+	int rc = 0;
+
+	rc = mdss_pll_util_parse_dt_dfps_sub(pdev, pll_res);
+	if (rc)
+		pr_err("dfps not enabled!\n");
 }

@@ -1,15 +1,5 @@
-/* Copyright (c) 2013-2017, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- */
+// SPDX-License-Identifier: GPL-2.0-only
+/* Copyright (c) 2013-2021, The Linux Foundation. All rights reserved. */
 
 #define pr_fmt(fmt)	"%s: " fmt, __func__
 
@@ -22,6 +12,7 @@
 #include "mdss-pll.h"
 #include "mdss-dsi-pll.h"
 #include "mdss-dp-pll.h"
+#include "mdss-hdmi-pll.h"
 
 int mdss_pll_resource_enable(struct mdss_pll_resources *pll_res, bool enable)
 {
@@ -125,10 +116,22 @@ static int mdss_pll_resource_parse(struct platform_device *pdev,
 		goto err;
 	}
 
-	if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_10nm"))
-		pll_res->pll_interface_type = MDSS_DSI_PLL_10NM;
-	if (!strcmp(compatible_stream, "qcom,mdss_dp_pll_10nm"))
-		pll_res->pll_interface_type = MDSS_DP_PLL_10NM;
+	if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_14nm"))
+		pll_res->pll_interface_type = MDSS_DSI_PLL_14NM;
+	else if (!strcmp(compatible_stream, "qcom,mdss_dp_pll_14nm"))
+		pll_res->pll_interface_type = MDSS_DP_PLL_14NM;
+	else if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_sdm660")) {
+		pll_res->pll_interface_type = MDSS_DSI_PLL_14NM;
+		pll_res->target_id = MDSS_PLL_TARGET_SDM660;
+		pll_res->revision = 2;
+	} else if (!strcmp(compatible_stream, "qcom,mdss_dp_pll_sdm660")) {
+		pll_res->pll_interface_type = MDSS_DP_PLL_14NM;
+		pll_res->target_id = MDSS_PLL_TARGET_SDM660;
+		pll_res->revision = 2;
+	} else if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_12nm"))
+		pll_res->pll_interface_type = MDSS_DSI_PLL_12NM;
+	else if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_28lpm"))
+		pll_res->pll_interface_type = MDSS_DSI_PLL_28LPM;
 	else
 		goto err;
 
@@ -151,11 +154,17 @@ static int mdss_pll_clock_register(struct platform_device *pdev,
 	}
 
 	switch (pll_res->pll_interface_type) {
-	case MDSS_DSI_PLL_10NM:
-		rc = dsi_pll_clock_register_10nm(pdev, pll_res);
+	case MDSS_DSI_PLL_14NM:
+		rc = dsi_pll_clock_register_14nm(pdev, pll_res);
 		break;
-	case MDSS_DP_PLL_10NM:
-		rc = dp_pll_clock_register_10nm(pdev, pll_res);
+	case MDSS_DP_PLL_14NM:
+		rc = dp_pll_clock_register_14nm(pdev, pll_res);
+		break;
+	case MDSS_DSI_PLL_28LPM:
+		rc = dsi_pll_clock_register_28lpm(pdev, pll_res);
+		break;
+	case MDSS_DSI_PLL_12NM:
+		rc = dsi_pll_clock_register_12nm(pdev, pll_res);
 		break;
 	case MDSS_UNKNOWN_PLL:
 	default:
@@ -332,6 +341,8 @@ static int mdss_pll_probe(struct platform_device *pdev)
 		goto clock_register_error;
 	}
 
+	mdss_pll_util_parse_dt_dfps(pdev, pll_res);
+
 	return rc;
 
 clock_register_error:
@@ -356,7 +367,6 @@ phy_io_error:
 res_parse_error:
 	iounmap(pll_res->pll_base);
 io_error:
-	devm_kfree(&pdev->dev, pll_res);
 error:
 	return rc;
 }
@@ -367,7 +377,7 @@ static int mdss_pll_remove(struct platform_device *pdev)
 
 	pll_res = platform_get_drvdata(pdev);
 	if (!pll_res) {
-		pr_err("Invalid PLL resource data");
+		pr_err("Invalid PLL resource data\n");
 		return 0;
 	}
 
@@ -378,13 +388,16 @@ static int mdss_pll_remove(struct platform_device *pdev)
 		iounmap(pll_res->gdsc_base);
 	mdss_pll_resource_release(pdev, pll_res);
 	iounmap(pll_res->pll_base);
-	devm_kfree(&pdev->dev, pll_res);
 	return 0;
 }
 
 static const struct of_device_id mdss_pll_dt_match[] = {
-	{.compatible = "qcom,mdss_dsi_pll_10nm"},
-	{.compatible = "qcom,mdss_dp_pll_10nm"},
+	{.compatible = "qcom,mdss_dsi_pll_14nm"},
+	{.compatible = "qcom,mdss_dp_pll_14nm"},
+	{.compatible = "qcom,mdss_dsi_pll_sdm660"},
+	{.compatible = "qcom,mdss_dp_pll_sdm660"},
+	{.compatible = "qcom,mdss_dsi_pll_12nm"},
+	{.compatible = "qcom,mdss_dsi_pll_28lpm"},
 	{}
 };
 
