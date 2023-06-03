@@ -67,6 +67,10 @@
 #define ALPHA_BITWIDTH		32
 #define SUPPORTS_16BIT_ALPHA	16
 
+#define pll_alpha_width(p)					\
+		((((p)->offset + PLL_ALPHA_VAL_U) - ((p)->offset + PLL_ALPHA_VAL) == 4) ?	\
+				 ALPHA_REG_BITWIDTH : SUPPORTS_16BIT_ALPHA)
+
 #define FABIA_USER_CTL_LO	0xc
 #define FABIA_USER_CTL_HI	0x10
 #define FABIA_FRAC_VAL		0x38
@@ -157,12 +161,15 @@ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
 
 	regmap_write(regmap, pll->offset + PLL_CONFIG_CTL,
 			   config->config_ctl_val);
+	regmap_write(regmap, pll->offset + PLL_ALPHA_VAL, config->alpha);
 
 	val = config->main_output_mask;
 	val |= config->aux_output_mask;
 	val |= config->aux2_output_mask;
 	val |= config->early_output_mask;
 	val |= config->post_div_val;
+	val |= config->alpha_en_mask;
+	val |= config->alpha_mode_mask;
 
 	mask = config->main_output_mask;
 	mask |= config->aux_output_mask;
@@ -171,6 +178,9 @@ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
 	mask |= config->post_div_mask;
 
 	regmap_update_bits(regmap, pll->offset + PLL_USER_CTL, mask, val);
+
+	if (pll_alpha_width(pll) > 32)
+		regmap_write(regmap, pll->offset + PLL_ALPHA_VAL_U, config->alpha_hi);
 }
 
 static int clk_alpha_pll_hwfsm_enable(struct clk_hw *hw)

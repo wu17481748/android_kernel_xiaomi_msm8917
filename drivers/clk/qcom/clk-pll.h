@@ -86,6 +86,8 @@ struct pll_config {
 	u16 l;
 	u32 m;
 	u32 n;
+	u32 alpha;
+	u32 alpha_hi;
 	u32 frac;
 	u32 vco_val;
 	u32 vco_mask;
@@ -99,6 +101,8 @@ struct pll_config {
 	u32 aux_output_mask;
 	u32 aux2_output_mask;
 	u32 early_output_mask;
+	u32 alpha_en_mask;
+	u32 alpha_mode_mask;
 	u32 config_ctl_val;
 	u32 config_ctl_hi_val;
 	u32 config_ctl_hi1_val;
