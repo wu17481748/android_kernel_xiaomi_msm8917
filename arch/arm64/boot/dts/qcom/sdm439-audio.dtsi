@@ -37,7 +37,6 @@
 	};
 };
 
-
 &clock_audio {
 	pinctrl-names = "active", "sleep";
 	pinctrl-0 = <&tasha_mclk_default>;

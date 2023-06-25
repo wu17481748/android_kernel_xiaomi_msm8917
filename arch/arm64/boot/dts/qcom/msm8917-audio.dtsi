@@ -309,7 +309,7 @@
 		#clock-cells = <1>;
 		qcom,audio-ref-clk-gpio = <&pm8937_gpios 1 0>;
 		qcom,lpass-mclk-id = "pri_mclk";
-		clocks = <&clock_gcc clk_div_clk2>;
+		clocks = <&rpmcc RPM_SMD_DIV_CLK2>;
 		pinctrl-0 = <&cdc_mclk2_sleep>;
 		pinctrl-1 = <&cdc_mclk2_active>;
 	};
@@ -326,8 +326,9 @@
 		status = "disabled";
 		compatible = "qcom,tasha-slim-pgd";
 		clock-names = "wcd_clk", "wcd_native_clk";
+		/*
 		clocks = <&clock_audio clk_audio_pmi_clk>,
-			<&clock_audio clk_audio_ap_clk2>;
+			<&clock_audio clk_audio_ap_clk2>;*/
 
 		qcom,cdc-reset-gpio = <&tlmm 68 0>;
 

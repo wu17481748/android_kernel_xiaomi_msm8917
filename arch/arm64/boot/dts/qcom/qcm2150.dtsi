@@ -11,9 +11,9 @@
  * GNU General Public License for more details.
  */
 
-#include "qm215.dtsi"
-#include "qm215-pm8916.dtsi"
-#include "qm215-audio.dtsi"
+//#include "qm215.dtsi"
+//#include "qm215-pm8916.dtsi"
+//#include "qm215-audio.dtsi"
 
 / {
 	model = "Qualcomm Technologies, Inc. QCM2150";
